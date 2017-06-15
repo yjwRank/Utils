@@ -17,6 +17,8 @@ public class test {
         root.rightNode().rightNode().setLeftNode(new Node().setC('H'));
 
         printA(root);
+        System.out.println();
+        printB(root);
     }
 
 
@@ -35,6 +37,17 @@ public class test {
 
     public static void printB(Node root){
         Stack<Node> stack=new Stack<>();
+        Node ps=root;
+        while(ps!=null || !stack.empty()){
+            if(ps == null){
+                ps=stack.pop();
+                System.out.print(ps.getValue()+" ");
+                ps=ps.rightNode();
+            }else{
+                stack.push(ps);
+                ps=ps.leftNode();
+            }
+        }
 
     }
 

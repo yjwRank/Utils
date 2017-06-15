@@ -1,6 +1,10 @@
+import org.json.simple.parser.JSONParser;
+
 import java.io.*;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,10 +13,67 @@ import java.util.regex.Pattern;
  * Created by yjw on 17-4-7.
  */
 public class tress {
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args){
+        String pasdir=args[0];
+        String pasjobdir=args[1];
+        File dir=new File(System.getProperty("user.dir"));
+        System.out.println(dir.getAbsolutePath());
+        System.out.println("pasdir:"+pasdir+" pasjobdir:"+pasjobdir);
+        File[] files=dir.listFiles();
+        System.out.println("-----------------get list------------------------------"+files.length);
+        Queue<File> q=new LinkedList<>();
+        q.add(dir);
+        while(q.size()>0){
+            File tmp=q.poll();
+            if(tmp.isDirectory()){
+                File[] fs=tmp.listFiles();
+                for(File f:fs){
+                    q.add(f);
+                }
+            }else{
+                System.out.println(tmp.getAbsolutePath());
+            }
+        }
+        System.out.println("-------------------------------1------------------------------");
+        try {
+            FileInputStream in=new FileInputStream(pasdir);
+            int c=0;
+            while((c=in.read())!=-1){
+                System.out.println(c);
+            }
+
+            in.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("-------------------------------2------------------------------");
+        try {
+            FileInputStream in2=new FileInputStream(pasjobdir);
+            int c1=0;
+            while((c1=in2.read())!=-1){
+                System.out.println(c1);
+            }
+
+            in2.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void main1(String[] args) throws IOException, InterruptedException {
         System.out.println(36000_000);
 
-
+        Object isBoring=null;
+        boolean isB=isBoring!=null&&Boolean.valueOf(String.valueOf(isBoring));
+        System.out.println(isB);
 
 
          Node root=new Node();
