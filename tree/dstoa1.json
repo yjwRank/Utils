@@ -1,0 +1,26 @@
+{
+    "nodes": [
+        {
+            "id": "ds",
+            "name": "ds",
+            "input": 0,
+            "output": 1
+        },
+        {
+            "id": "a1",
+            "name": "a1",
+            "input": 1,
+            "output": 0
+        }
+    ],
+    "arrows": [
+        {
+            "from": {
+                "id": "ds"
+            },
+            "to": {
+                "id": "a1"
+            }
+        }
+    ]
+}

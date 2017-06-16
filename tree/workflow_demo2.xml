@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<workflow-app xmlns="uri:oozie:workflow:0.2" name="java-main-wf">
+    <start to="fork1"/>
+    <fork name="fork1">
+        <path start="fork2"/>
+        <path start="ds3"/>
+    </fork>
+    <fork name="fork2">
+        <path start="ds1"/>
+        <path start="ds2"/>
+    </fork>
+    <action name="ds1">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>workflowtest</main-class>
+            <arg>${ds1_pasdir}</arg>
+            <arg>${ds1_pasjobdir}</arg>
+        </java>
+        <ok to="a1_join"/>
+        <error to="fail"/>
+    </action>
+    <action name="ds2">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>workflowtest</main-class>
+            <arg>${ds2_pasdir}</arg>
+            <arg>${ds2_pasjobdir}</arg>
+        </java>
+        <ok to="a1_join"/>
+        <error to="fail"/>
+    </action>
+    <action name="ds3">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>workflowtest</main-class>
+            <arg>${ds3_pasdir}</arg>
+            <arg>${ds3_pasjobdir}</arg>
+        </java>
+        <ok to="a2_join"/>
+        <error to="fail"/>
+    </action>
+    <join name="a1_join" to="a1"/>
+    <action name="a1">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>workflowtest</main-class>
+            <arg>${a1_pasdir}</arg>
+            <arg>${a1_pasjobdir}</arg>
+        </java>
+        <ok to="a2_join"/>
+        <error to="fail"/>
+    </action>
+    <join name="a2_join" to="a2"/>
+    <action name="a2">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>workflowtest</main-class>
+            <arg>${a2_pasdir}</arg>
+            <arg>${a2_pasjobdir}</arg>
+        </java>
+        <ok to="fork3"/>
+        <error to="fail"/>
+    </action>
+    <fork name="fork3">
+        <path start="a3"/>
+        <path start="a4"/>
+    </fork>
+    <action name="a4">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>workflowtest</main-class>
+            <arg>${a4_pasdir}</arg>
+            <arg>${a4_pasjobdir}</arg>
+        </java>
+        <ok to="a5_join"/>
+        <error to="fail"/>
+    </action>
+    <action name="a3">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>workflowtest</main-class>
+            <arg>${a3_pasdir}</arg>
+            <arg>${a3_pasjobdir}</arg>
+        </java>
+        <ok to="a5_join"/>
+        <error to="fail"/>
+    </action>
+    <join name="a5_join" to="fork4"/>
+    <fork name="fork4">
+        <path start="a5"/>
+        <path start="a6"/>
+    </fork>
+    <action name="a5">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>workflowtest</main-class>
+            <arg>${a5_pasdir}</arg>
+            <arg>${a5_pasjobdir}</arg>
+        </java>
+        <ok to="join"/>
+        <error to="fail"/>
+    </action>
+    <action name="a6">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>workflowtest</main-class>
+            <arg>${a6_pasdir}</arg>
+            <arg>${a6_pasjobdir}</arg>
+        </java>
+        <ok to="join"/>
+        <error to="fail"/>
+    </action>
+    <join name="join" to="end"/>
+    <kill name="fail">
+        <message>Java failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>

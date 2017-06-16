@@ -1,14 +1,12 @@
 import org.codehaus.jackson.map.ObjectMapper;
-import org.dom4j.Attribute;
-import org.json.simple.JSONObject;
-
-import java.io.*;
-import java.util.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+
+import java.io.*;
+import java.util.*;
 /**
  * Created by yjw on 17-6-9.
  */
@@ -184,7 +182,7 @@ public class JsonToXml {
                 "    ]\n" +
                 "}";
 
-        json="{\n" +
+       /* json="{\n" +
                 "    \"nodes\": [\n" +
                 "        {\n" +
                 "            \"id\": \"ds1\",\n" +
@@ -315,15 +313,20 @@ public class JsonToXml {
                 "            }\n" +
                 "        }\n" +
                 "    ]\n" +
-                "}";
-
+                "}";*/
+      //  System.out.println(json);
         JsonToXml jsonToXml=new JsonToXml();
         jsonToXml.convertJsonToAccrossLink(json);
-        System.out.println("test");
  //       List<VexNode> nodes=jsonToXml.getNodes();
 //        List<VexNode> pre=jsonToXml.getPre(nodes.get(5));
-        System.out.println("test");
-       // jsonToXml.run();
+         ArrayList<VexNode> list= (ArrayList<VexNode>) jsonToXml.getNodes();
+        for(VexNode node:list){
+            Map<Integer,Boolean> v=new HashMap<>();
+            if(jsonToXml.visit(node,list,v)){
+                System.out.println("true");
+                break;
+            }
+        }
         jsonToXml.run3();
     }
 
@@ -353,15 +356,14 @@ public class JsonToXml {
     }
 
 
-    public boolean visit(VexNode node,ArrayList<VexNode> nodes,Map<Integer,Boolean> v,List<VexNode> Line){
+    public boolean visit(VexNode node,ArrayList<VexNode> nodes,Map<Integer,Boolean> v){
         if(v.get(node.data)==null){
             v.put(node.data,true);
             //get nodes
-            Line.add(node);
             List<VexNode> nextnodes=getNextNodes(node,nodes);
             for(VexNode nextnode:nextnodes){
                 Map<Integer,Boolean> tv=new HashMap<>(v);
-                if(visit(nextnode,nodes,tv,Line)){
+                if(visit(nextnode,nodes,tv)){
                     return true;
                 }
             }
@@ -829,7 +831,7 @@ public class JsonToXml {
 
         OutputFormat format=OutputFormat.createPrettyPrint();
         XMLWriter writer;
-        OutputStream outputStream=new FileOutputStream("/home/yjw/tmp/testOOZ/workflow.xml");
+        OutputStream outputStream=new FileOutputStream("workflow.xml");
         try {
             writer=new XMLWriter(outputStream,format);
             writer.write(document);
